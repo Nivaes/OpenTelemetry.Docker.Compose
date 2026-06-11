@@ -8,9 +8,15 @@ otelcol.receiver.otlp "default" {
   }
 
   output {
-    metrics = [otelcol.exporter.prometheus.default.input]
-    logs    = [otelcol.exporter.loki.default.input]
-    traces  = [otelcol.exporter.otlp.tempo.input]
+    metrics = [
+      otelcol.exporter.prometheus.default.input,
+      ]
+    logs = [
+      otelcol.exporter.loki.default.input,
+      ]
+    traces = [
+      otelcol.exporter.otlp.tempo.input,
+      ]
   }
 }
 

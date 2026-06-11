@@ -9,6 +9,22 @@ volumes:
 
 services:
 
+  # otel-collector:
+  #   image: otel/opentelemetry-collector-contrib:latest
+  #   command: ["--config=/etc/otelcol/config.yaml"]
+  #   volumes:
+  #     - ./otel-collector/otel-collector-config.yaml:/etc/otelcol/config.yaml
+  #   ports:
+  #     - "4317:4317" # OTLP gRPC
+  #     - "4318:4318" # OTLP HTTP
+  #     - "8889:8889" # Prometheus Exporter
+  #   depends_on:
+  #     - prometheus
+  #     - tempo
+  #     - loki
+  #   networks:
+  #     - observability
+
   alloy:
     image: grafana/alloy:latest
     container_name: alloy
@@ -44,10 +60,10 @@ services:
     command: -config.file=/etc/tempo.yaml
     volumes:
       - ./tempo/tempo.yaml:/etc/tempo.yaml
-      - tempo-data:/tmp/tempo
+      - tempo-data:/var/tempo
     ports:
       - "3200:3200"
-      - "4319:4317"
+      - "4319:4319"
     networks:
       - observability
 
@@ -80,3 +96,8 @@ services:
       - "3000:3000"
     networks:
       - observability
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
