@@ -3,11 +3,11 @@ name: grafana-otel
 networks:
   observability:
 
-# volumes:
-#   grafana-data:
-#   prometheus-data:
-#   loki-data:
-#   tempo-data:
+volumes:
+  grafana-data:
+  prometheus-data:
+  loki-data:
+  tempo-data:
 
 services:
   loki:
@@ -16,12 +16,11 @@ services:
     ports:
       - "3100:3100"
     volumes:
-      - ./tmp/loki:/loki/
+      - loki-data:/loki/
       - ./.config/loki-config.yml:/etc/loki/local-config.yaml:ro
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - observability
-
 
   tempo:
     image: grafana/tempo:latest
@@ -29,7 +28,7 @@ services:
     command: [ "-config.file=/etc/tempo.yaml" ]
     volumes:
       - ./.config/tempo.yaml:/etc/tempo.yaml
-      - ./tmp/tempo:/tmp/tempo
+      - tempo-data:/tmp/tempo
   #    ports:
   #      - "14268:14268" # jaeger ui
   #      - "3200:3200"   # tempo      
@@ -54,7 +53,7 @@ services:
       - '--web.enable-lifecycle'
     volumes:
       - ./.config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./tmp/prometheus:/prometheus
+      - prometheus-data:/prometheus
     networks:
       - observability
 
@@ -67,7 +66,7 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_AUTH_DISABLE_LOGIN_FORM=true
     volumes:
-      - ./tmp/grafana/:/var/lib/grafana/
+      - grafana-data/:/var/lib/grafana/
       - ./.config/ds.yaml:/etc/grafana/provisioning/datasources/ds.yaml
     ports:
       - "3000:3000"
@@ -92,5 +91,15 @@ services:
       #   - 8889:8889 # Prometheus exporter metrics for applications
       #   - 13133:13133 # health_check extension      
       #   - 55679:55679 # zpages extension
+    networks:
+      - observability
+
+  pyroscope:
+    image: grafana/pyroscope:latest
+    container_name: pyroscope
+    ports:
+      - "4040:4040"
+    command:
+      - "server"
     networks:
       - observability
