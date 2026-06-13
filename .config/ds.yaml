@@ -40,3 +40,8 @@ datasources:
     editable: false
     jsonData:
       httpMethod: GET
+
+  - name: Pyroscope
+    type: grafana-pyroscope-datasource
+    uid: pyroscope
+    url: http://pyroscope:4040
