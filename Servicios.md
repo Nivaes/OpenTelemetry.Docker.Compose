@@ -10,4 +10,4 @@
 
 [Prometheus](http://localhost:9090)
 
-[jaeger](http://localhost:16686)
+[pyroscope](http://localhost:4040)
