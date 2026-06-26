@@ -23,12 +23,12 @@ processors:
 exporters:
   prometheus: # metrics
     endpoint: "0.0.0.0:8889"
-    namespace: demo
+    # namespace: demo
     send_timestamps: true
     resource_to_telemetry_conversion:
       enabled: true
-    const_labels:
-      exported: "collector"
+    # const_labels:
+    #   exported: "collector"
   
   otlp/tempo:
     endpoint: tempo:4317
@@ -49,12 +49,12 @@ service:
     metrics:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ prometheus ]
+      exporters: [ prometheus, debug ]
     
     traces:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ otlp/tempo ]
+      exporters: [ otlp/tempo, debug ]
     
     logs:
       receivers: [ otlp ]

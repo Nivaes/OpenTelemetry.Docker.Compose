@@ -29,14 +29,10 @@ services:
     volumes:
       - ./.config/tempo.yaml:/etc/tempo.yaml
       - tempo-data:/var/tempo
-  #    ports:
-  #      - "14268:14268" # jaeger ui
-  #      - "3200:3200"   # tempo      
-  #      - "4317:4317"  # otlp grpc
-  #      - "4318:4318"  # otlp http
+    # ports:
+    #    - "3200:3200"   # tempo
     networks:
       - observability
-
   
   prometheus:
     image: prom/prometheus:latest
@@ -101,5 +97,15 @@ services:
       - "4040:4040"
     command:
       - "server"
+    networks:
+      - observability
+
+  ubuntu:
+    # image: ubuntu:24.04
+    image: nicolaka/netshoot:latest
+    container_name: ubuntu
+    stdin_open: true
+    tty: true
+    command: /bin/bash
     networks:
       - observability
