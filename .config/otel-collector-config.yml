@@ -21,6 +21,10 @@ processors:
     send_batch_size: 1024
 
 exporters:
+  telemetry:
+    metrics:
+      address: 0.0.0.0:8888
+      
   prometheus: # metrics
     endpoint: "0.0.0.0:8889"
     # namespace: demo
